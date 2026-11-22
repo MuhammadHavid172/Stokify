@@ -14,9 +14,12 @@
                     Platform sistem informasi manajemen kios multi-tenant modern. Transaksi kasir kilat, stok otomatis, dan laporan pembukuan usaha siap cetak.
                 </p>
                 <div class="pt-1 flex items-center gap-2 text-xs text-gray-400">
-                    <span>Hubungi kami:</span>
-                    <a href="mailto:halo@stokify.test" class="text-white hover:underline font-semibold underline-offset-4 transition">
-                        halo@stokify.test
+                    <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span>Email Resmi:</span>
+                    <a href="mailto:stokify.app27@gmail.com" class="text-white hover:text-emerald-300 hover:underline font-semibold underline-offset-4 transition">
+                        stokify.app27@gmail.com
                     </a>
                 </div>
             </div>

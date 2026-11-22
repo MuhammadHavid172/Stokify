@@ -33,7 +33,7 @@
                        type="text" 
                        name="login" 
                        value="{{ old('login') ?? old('username') ?? old('email') }}" 
-                       placeholder="nama@email.com / username kasir" 
+                       placeholder="Email atau Username" 
                        required 
                        autocomplete="off"
                        autocorrect="off"

@@ -73,7 +73,7 @@ class LandingPageTest extends TestCase
 
         // CTA & Footer
         $response->assertSee('Siap Merapikan Kios Anda?');
-        $response->assertSee('halo@stokify.test');
+        $response->assertSee('stokify.app27@gmail.com');
         $response->assertSee('© 2026 Stokify. Dibuat sebagai proyek Sistem Informasi Manajemen.');
     }
 
