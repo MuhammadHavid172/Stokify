@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #166534;
+    --primary-hover: #14532D;
+    --primary-tint: #DCFCE7;
+    --bg-page: #F6F7F5;
+    --bg-card: #FFFFFF;
+    --border: #E5E7EB;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --success: #16A34A;
+    --success-bg: #DCFCE7;
+    --warning: #D97706;
+    --warning-bg: #FEF3C7;
+    --danger: #DC2626;
+    --danger-bg: #FEE2E2;
+    --info: #2563EB;
+    --info-bg: #DBEAFE;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Sembunyikan ikon mata bawaan browser Edge / Windows agar tidak dobel */
+input::-ms-reveal,
+input::-ms-clear {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Netralkan warna latar belakang biru autofill browser */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: #1e293b !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Hilangkan panah spinner bawaan browser pada input type number */
+input.no-spinner::-webkit-inner-spin-button,
+input.no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+input.no-spinner {
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+/* Angka tabular untuk seluruh nilai moneter dan kuantitas */
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbar halus untuk container scroll internal */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #E5E7EB;
+    border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #D1D5DB;
+}
+
+/* Utilitas Tipografi & Perataan Teks */
+h1, h2, h3, h4, .text-balance {
+    text-wrap: balance;
+}
+
+/* Hotwired Turbo Progress Bar Bertema Hijau Stokify */
+.turbo-progress-bar {
+    background: linear-gradient(to right, #166534, #22C55E) !important;
+    height: 3px !important;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.5) !important;
+}
+
+p, .text-pretty {
+    text-wrap: pretty;
+}
+
+.teks-penjelasan {
+    text-align: left;
+    line-height: 1.7;
+    max-width: 65ch;
+    color: #4b5563;
+    overflow-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+    .teks-penjelasan {
+        text-align: justify;
+        text-justify: inter-word;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+    }
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        background-color: #F6F7F5;
+        color: #111827;
+    }
+
+    body {
+        background-color: #F6F7F5;
+        color: #111827;
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+}
