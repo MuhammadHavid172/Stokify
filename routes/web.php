@@ -40,6 +40,21 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'active', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Optimasi Kecepatan Sistem (Cache Config, Route, & View secara instan via Web)
+    Route::get('/optimasi-sistem', function () {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+            \Illuminate\Support\Facades\Artisan::call('optimize');
+            \Illuminate\Support\Facades\Artisan::call('view:cache');
+
+            return redirect()->route('admin.dashboard')
+                ->with('success', 'Performa sistem berhasil dioptimalkan! Cache konfigurasi dan rute kini aktif.');
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'Gagal melakukan optimasi: ' . $e->getMessage());
+        }
+    })->name('optimasi');
+
     // Master Kategori Barang
     Route::prefix('kategori')->name('kategori.')->group(function () {
         Route::get('/', [KategoriController::class, 'index'])->name('index');

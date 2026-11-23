@@ -207,6 +207,17 @@
                             </svg>
                             <span>Pengaturan Kios</span>
                         </a>
+
+                        <!-- 9. Optimasi Kecepatan Sistem -->
+                        <a href="{{ route('admin.optimasi') }}" 
+                           @click="sidebarOpen = false"
+                           title="Segarkan cache dan optimalkan kecepatan website"
+                           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all duration-150 text-emerald-100/90 hover:bg-white/10 hover:text-white font-medium">
+                            <svg class="w-4 h-4 text-emerald-300/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            <span>Optimalkan Sistem</span>
+                        </a>
                     </div>
 
                 </nav>
@@ -269,6 +280,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                                 <span>Profil Akun</span>
+                            </a>
+                            <a href="{{ route('admin.optimasi') }}" class="flex items-center gap-2 px-4 py-2 text-xs text-emerald-700 hover:bg-emerald-50 font-medium transition">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <span>Optimalkan Sistem</span>
                             </a>
                             <form method="POST" action="{{ route('logout') }}" data-turbo="false">
                                 @csrf
