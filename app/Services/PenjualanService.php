@@ -38,7 +38,8 @@ class PenjualanService
         int $bayar,
         string $token,
         ?User $user = null,
-        ?DateTimeInterface $waktuTransaksi = null
+        ?DateTimeInterface $waktuTransaksi = null,
+        string $metodeBayar = 'tunai'
     ): Penjualan {
         $user = $user ?? Auth::user();
         if (! $user) {
@@ -159,14 +160,21 @@ class PenjualanService
                 ];
             }
 
-            // 4. Validasi pembayaran tunai
-            if ($bayar < $total) {
-                throw ValidationException::withMessages([
-                    'bayar' => 'Uang bayar kurang dari total belanja.',
-                ]);
+            $metode = in_array(strtolower($metodeBayar), ['tunai', 'qris']) ? strtolower($metodeBayar) : 'tunai';
+
+            // 4. Validasi pembayaran
+            if ($metode === 'qris') {
+                $bayar = $total; // Pembayaran QRIS nominalnya selalu pas sesuai total
+                $kembalian = 0;
+            } else {
+                if ($bayar < $total) {
+                    throw ValidationException::withMessages([
+                        'bayar' => 'Uang bayar kurang dari total belanja.',
+                    ]);
+                }
+                $kembalian = $bayar - $total;
             }
 
-            $kembalian = $bayar - $total;
             $waktu = $waktuTransaksi ? Carbon::parse($waktuTransaksi) : Carbon::now('Asia/Jayapura');
 
             // 5. Generate nomor nota urut harian per kios
@@ -183,7 +191,7 @@ class PenjualanService
                 'bayar' => $bayar,
                 'kembalian' => $kembalian,
                 'total_modal' => $totalModal,
-                'metode_bayar' => 'tunai',
+                'metode_bayar' => $metode,
                 'status' => 'selesai',
                 'token' => $token,
             ]);

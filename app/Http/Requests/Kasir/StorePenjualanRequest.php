@@ -26,7 +26,8 @@ class StorePenjualanRequest extends FormRequest
 
         return [
             'token' => ['required', 'string'],
-            'bayar' => ['required', 'integer', 'min:1'],
+            'bayar' => ['required', 'integer', 'min:0'],
+            'metode_bayar' => ['nullable', 'string', 'in:tunai,qris'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.barang_id' => [
                 'required',

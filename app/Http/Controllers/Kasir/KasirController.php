@@ -169,7 +169,8 @@ class KasirController extends Controller
             items: $request->input('items', []),
             bayar: (int) $request->input('bayar'),
             token: (string) $request->input('token'),
-            user: $request->user()
+            user: $request->user(),
+            metodeBayar: (string) $request->input('metode_bayar', 'tunai')
         );
 
         if ($request->wantsJson() || $request->ajax()) {
@@ -182,6 +183,7 @@ class KasirController extends Controller
                     'total' => $penjualan->total,
                     'bayar' => $penjualan->bayar,
                     'kembalian' => $penjualan->kembalian,
+                    'metode_bayar' => $penjualan->metode_bayar,
                     'waktu_transaksi' => $penjualan->waktu_transaksi->format('d/m/Y H:i'),
                     'struk_url' => route('kasir.penjualan.struk', $penjualan->id),
                 ],

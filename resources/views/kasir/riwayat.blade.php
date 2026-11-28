@@ -187,7 +187,16 @@
                                     <span class="text-[10px] text-gray-400 block">({{ $p->detail->count() }} jenis barang)</span>
                                 </td>
                                 <td class="py-3 px-4 text-right font-bold tabular-nums {{ $isBatal ? 'line-through text-gray-400' : 'text-gray-900' }}">
-                                    Rp {{ number_format($p->total, 0, ',', '.') }}
+                                    <div>Rp {{ number_format($p->total, 0, ',', '.') }}</div>
+                                    @if ($p->metode_bayar === 'qris')
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                                            QRIS
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-600">
+                                            TUNAI
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="py-3 px-4 text-center">
                                     @if ($isBatal)

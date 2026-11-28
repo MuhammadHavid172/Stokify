@@ -13,6 +13,63 @@
         },
         hargaModal: '{{ old('harga_modal', '') }}',
         hargaJual: '{{ old('harga_jual', '') }}',
+        cameraScannerOpen: false,
+        html5QrCodeInstance: null,
+        playBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1400, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.12);
+            } catch(e) {}
+        },
+        async openCameraScanner() {
+            this.cameraScannerOpen = true;
+            this.$nextTick(async () => {
+                try {
+                    if (typeof Html5Qrcode === 'undefined') {
+                        alert('Pustaka scanner kamera belum siap. Coba periksa koneksi atau muat ulang.');
+                        this.cameraScannerOpen = false;
+                        return;
+                    }
+                    if (this.html5QrCodeInstance) {
+                        try { await this.html5QrCodeInstance.stop(); } catch(e) {}
+                    }
+                    this.html5QrCodeInstance = new Html5Qrcode('create-camera-reader');
+                    await this.html5QrCodeInstance.start(
+                        { facingMode: 'environment' },
+                        { fps: 12, qrbox: { width: 250, height: 180 }, aspectRatio: 1.333333 },
+                        (decodedText) => {
+                            if (decodedText) {
+                                this.playBeep();
+                                this.kode = decodedText.trim();
+                                this.closeCameraScanner();
+                            }
+                        }
+                    );
+                } catch(err) {
+                    alert('Tidak dapat mengakses kamera: ' + (err.message || 'Izin kamera ditolak.'));
+                    this.cameraScannerOpen = false;
+                }
+            });
+        },
+        async closeCameraScanner() {
+            if (this.html5QrCodeInstance) {
+                try {
+                    await this.html5QrCodeInstance.stop();
+                    await this.html5QrCodeInstance.clear();
+                } catch(e) {}
+                this.html5QrCodeInstance = null;
+            }
+            this.cameraScannerOpen = false;
+        },
         get isRugi() {
             return Number(this.hargaJual) > 0 && Number(this.hargaModal) > 0 && Number(this.hargaJual) < Number(this.hargaModal);
         }
@@ -62,11 +119,22 @@
                                 <label for="kode" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
                                     Kode Barang <span class="text-rose-500">*</span>
                                 </label>
-                                <button type="button" 
-                                        @click="updateKodeOtomatis()" 
-                                        class="text-[11px] font-semibold text-[#166534] hover:text-[#14532D] underline transition">
-                                    Buat otomatis
-                                </button>
+                                <div class="flex items-center gap-2">
+                                    <button type="button" 
+                                            @click="openCameraScanner()" 
+                                            class="inline-flex items-center gap-1 text-[11px] font-bold text-[#166534] hover:text-[#14532D] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span>Scan Kamera</span>
+                                    </button>
+                                    <button type="button" 
+                                            @click="updateKodeOtomatis()" 
+                                            class="text-[11px] font-semibold text-slate-500 hover:text-slate-800 underline transition">
+                                        Buat otomatis
+                                    </button>
+                                </div>
                             </div>
                             <input type="text" 
                                    id="kode" 
@@ -75,7 +143,7 @@
                                    required 
                                    placeholder="Kode barang atau scan barcode" 
                                    class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 font-mono text-xs sm:text-sm text-slate-900 focus:border-[#166534] focus:ring-1 focus:ring-[#166534] transition" />
-                            <p class="text-[11px] text-slate-400 mt-1">Otomatis sesuai kategori atau scan barcode.</p>
+                            <p class="text-[11px] text-slate-400 mt-1">Scan kemasan dengan kamera/scanner fisik atau klik otomatis.</p>
                             @error('kode')
                                 <p class="text-[11px] font-semibold text-rose-500 mt-1">{{ $message }}</p>
                             @enderror
@@ -276,6 +344,36 @@
                     </button>
                 </div>
             </form>
+        </div>
+
+        <!-- Modal Pemindai Barcode Kamera -->
+        <div x-show="cameraScannerOpen" 
+             x-cloak 
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs"
+             @keydown.escape.window="closeCameraScanner()">
+            <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-150">
+                <div class="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <h3 class="text-sm font-bold">Pindai Barcode Kemasan Barang</h3>
+                    </div>
+                    <button type="button" @click="closeCameraScanner()" class="p-1 rounded-lg text-slate-400 hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-4 bg-slate-950 flex flex-col items-center justify-center min-h-[300px]">
+                    <div id="create-camera-reader" class="w-full max-w-sm rounded-xl overflow-hidden bg-black shadow-inner"></div>
+                    <p class="text-xs text-slate-300 mt-3 text-center">Arahkan kamera ke barcode kemasan barang. Kode barcode akan terisi otomatis ke formulir.</p>
+                </div>
+                <div class="p-3 bg-slate-100 border-t border-slate-200 flex justify-end">
+                    <button type="button" @click="closeCameraScanner()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition">
+                        Batal & Tutup
+                    </button>
+                </div>
+            </div>
         </div>
 
     </div>

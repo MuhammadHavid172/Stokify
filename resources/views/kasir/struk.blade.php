@@ -199,7 +199,11 @@
                 <span>Rp {{ number_format($penjualan->total, 0, ',', '.') }}</span>
             </div>
             <div class="flex justify-between text-[11px]">
-                <span>Tunai:</span>
+                <span>Metode:</span>
+                <span class="font-bold uppercase">{{ $penjualan->metode_bayar === 'qris' ? 'QRIS' : 'TUNAI' }}</span>
+            </div>
+            <div class="flex justify-between text-[11px]">
+                <span>{{ $penjualan->metode_bayar === 'qris' ? 'Nominal QRIS:' : 'Tunai:' }}</span>
                 <span>Rp {{ number_format($penjualan->bayar, 0, ',', '.') }}</span>
             </div>
             <div class="flex justify-between text-[11px] font-semibold">

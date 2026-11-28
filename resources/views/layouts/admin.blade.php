@@ -19,6 +19,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|poppins:500,600,700,800&display=swap" rel="stylesheet" />
 
+    <!-- Pustaka Barcode Scanner Kamera -->
+    <script src="{{ asset('vendor/html5-qrcode/html5-qrcode.min.js') }}"></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body x-data="{ sidebarOpen: false }" class="min-h-full bg-[#F6F7F5] text-gray-900 antialiased font-sans">

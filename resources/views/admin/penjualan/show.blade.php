@@ -118,7 +118,7 @@
                     Rp {{ number_format($penjualan->total, 0, ',', '.') }}
                 </h3>
                 <span class="text-[11px] text-gray-500 mt-2 pt-2 border-t border-gray-100 tabular-nums">
-                    Bayar: Rp {{ number_format($penjualan->bayar, 0, ',', '.') }} &bull; Kembali: Rp {{ number_format($penjualan->kembalian, 0, ',', '.') }}
+                    Bayar: Rp {{ number_format($penjualan->bayar, 0, ',', '.') }} ({{ strtoupper($penjualan->metode_bayar ?? 'tunai') }}) &bull; Kembali: Rp {{ number_format($penjualan->kembalian, 0, ',', '.') }}
                 </span>
             </div>
 
